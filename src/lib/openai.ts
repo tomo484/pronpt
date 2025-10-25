@@ -1,13 +1,16 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
+function getOpenAIClient() {
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY!,
+  });
+}
 
 /**
  * DALL-E 3を使用して画像を生成
  */
 export async function generateImage(prompt: string): Promise<string> {
+  const openai = getOpenAIClient();
   try {
     const response = await openai.images.generate({
       model: 'dall-e-3',
@@ -40,6 +43,7 @@ export async function comparePrompts(
   modelPrompt: string,
   userPrompt: string
 ): Promise<number> {
+  const openai = getOpenAIClient();
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
@@ -82,6 +86,7 @@ export async function comparePrompts(
  * GPT-4 Visionを使用して画像から最適なプロンプトを生成
  */
 export async function generatePromptFromImage(imageUrl: string): Promise<string> {
+  const openai = getOpenAIClient();
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
